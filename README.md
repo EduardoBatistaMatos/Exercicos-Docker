@@ -37,6 +37,7 @@
 ### 8️⃣ Criando um compose file para rodar uma aplicação com banco de dados
 - Utilize Docker Compose para configurar uma aplicação Django com um banco de dados PostgreSQL.  
 - **Exemplo de aplicação**: Use o projeto Django Polls App para criar uma pesquisa de opinião integrada ao banco.
+- 
 
 ---
 
@@ -45,3 +46,63 @@
 ### 9️⃣ Criando uma imagem personalizada com um servidor web e arquivos estáticos
 - Construa uma imagem baseada no Nginx ou Apache, adicionando um site HTML/CSS estático.  
 - **Exemplo de aplicação**: Utilize a landing page do Creative Tim para criar uma página moderna hospedada no container.
+
+## Resolução Exercício 1️⃣
+```sh
+docker pull nginx  # Baixa a imagem do Nginx do Docker Hub
+docker run nginx  # Executa um container baseado na imagem do Nginx
+cd /var/www/html  # Acessa o diretório raiz do servidor web
+nano index.nginx-debian.html  # Abre o arquivo HTML para edição e insira o código desejado
+CTRL + O , CTRL + X.
+No caso utilizei o que foi mencionado no exercício.
+```
+
+## Resolução Exercício 2️⃣
+```sh
+docker pull ubuntu  # Baixa a imagem do Ubuntu do Docker Hub
+docker run -dti --name ubuntu-A ubuntu  # Cria e executa um container chamado "ubuntu-A" em modo interativo e em segundo plano
+docker exec -ti ubuntu-A /bin/bash  # Acessa o terminal do container
+cd /usr/local/bin  # Navega para o diretório onde o script será armazenado
+apt update  # Atualiza a lista de pacotes disponíveis
+apt upgrade  # Atualiza os pacotes instalados
+apt-get install nano  # Instala o editor de texto nano
+nano atualiza.sh  # Cria e edita um script de atualização
+    script:#!/bin/bash
+
+# Pedir confirmacao ao usuario
+read -p "Voce deseja atualizar o sistema? (sim/nao): " resposta
+
+# Verificar se o usuario e root
+if [[ "$EUID" -eq 0 ]]; then
+    echo "Voce esta logado como root. Executando com sudo."
+    if [[ "$resposta" == "sim" || "$resposta" == "s" ]]; then
+        echo "Atualizando o sistema..."
+        apt update && apt upgrade
+    else
+        echo "Ok."
+    fi
+else
+    echo "Voce nao esta logado como root. Executando sem sudo."
+    if [[ "$resposta" == "sim" || "$resposta" == "s" ]]; then
+        echo "Atualizando o sistema..."
+        apt update && apt upgrade
+    else
+        echo "Ok."
+    fi
+fi
+```
+```sh
+chmod +x atualiza.sh  # Concede permissão de execução ao script
+exit  # Sai do terminal do container
+docker exec -ti ubuntu-A /bin/bash /usr/local/bin/atualiza.sh  # Executa o script sem precisar entar no terminal do container.
+```
+## Resolução Exercício 3️⃣
+```sh
+docker ps -a  # Lista todos os containers (ativos e inativos)
+docker stop (id ou nome do container)  # Para a execução de um container
+docker rm (nome ou id do container)  # Remove um container parado
+```
+## Resolução Exercício 4️⃣
+```sh
+
+```
