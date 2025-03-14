@@ -230,9 +230,74 @@ Consulte o tamanho das imagems. ```docker images ```
 
 ## Resolução Exercício 7️⃣
 ```sh
+docker network create minha-rede
+docker run -d --name meu-mongo --network minha-rede mongo
+mkdir ex07
+cd ex07
+nano server.js
+
+const express = require('express');
+const mongoose = require('mongoose');
+
+const app = express();
+const PORT = 3000;
+
+mongoose.connect('mongodb://meu-mongo:27017/todos', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+const TodoSchema = new mongoose.Schema({ text: String });
+const Todo = mongoose.model('Todo', TodoSchema);
+
+app.use(express.json());
+
+app.post('/todos', async (req, res) => {
+  const todo = new Todo(req.body);
+  await todo.save();
+  res.send(todo);
+});
+
+app.get('/todos', async (_, res) => {
+  const todos = await Todo.find();
+  res.send(todos);
+});
+
+app.listen(PORT, () => console.log(`Server rodando na porta ${PORT}`));
+
+
+nano Dockerfile
+
+FROM node:18
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm install
+COPY . .
+CMD ["node", "server.js"]
+
+nano package.json
+{
+  "name": "mean-todos",
+  "version": "1.0.0",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.2.2"
+  }
+}
+
+npm install
+docker build -t meu-node .
+docker run -d --name meu-app --network minha-rede -p 3000:3000 meu-node
 ```
+Podemos postar uma tarefa:
+	```curl -X POST http://localhost:3000/todos -H "Content-Type: application/json" -d '{"text": "Testando a comunicação dos containers"}'  ```
+
+E listar ela:
+	``` curl http://localhost:3000/todos ```
+
 ## Resolução Exercício 8️⃣
 ```sh
+
 ```
 ## Resolução Exercício 9️⃣
 ```sh
