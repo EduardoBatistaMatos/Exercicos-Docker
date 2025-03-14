@@ -184,8 +184,50 @@ A tabela e os dados inseridos estarão lá pois o volume usado foi o mesmo.
 
 ## Resolução Exercício 6️⃣
 ```sh
+sudo apt install golang-go
+mkdir go-fiber
+cd go-fiber
+go mod init go-fiber
+go get github.com/gofiber/fiber/v2
 
+
+nano main.go
+package main
+import "github.com/gofiber/fiber/v2"
+func main() {
+    app := fiber.New()
+
+    app.Get("/", func(c *fiber.Ctx) error {
+        return c.SendString("Parabéns Eduardo, sua aplicação está funcionando !!!")
+    })
+
+    app.Listen(":3000")
+}
+
+nano Dockerfile
+
+FROM golang:1.22-alpine AS builder
+WORKDIR /app
+COPY go.mod go.sum ./
+RUN go mod tidy
+COPY . .
+RUN go build -o app .
+FROM alpine:latest
+RUN apk --no-cache add ca-certificates
+WORKDIR /root/
+COPY --from=builder /app/app .
+EXPOSE 3000
+CMD ["./app"]
+
+
+docker build -t go-fiber .
+docker run -p 3000:3000 go-fiber
 ```
+Acesse a página na URL http://localhost:3000/
+
+Consulte o tamanho das imagems. ```docker images ```
+
+
 ## Resolução Exercício 7️⃣
 ```sh
 ```
