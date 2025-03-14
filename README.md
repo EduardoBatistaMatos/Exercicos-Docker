@@ -106,5 +106,29 @@ docker rm (nome ou id do container)  # Remove um container parado
 ```
 ## Resolução Exercício 4️⃣
 ```sh
+mkdir flask
+nano app.py
+	from flask import Flask
 
+	app = Flask(__name__)
+
+	@app.route('/')
+	def home():
+    	return {"message": "Hello, Dockerized Flask!"}
+
+	if __name__ == '__main__':
+   	app.run(host='0.0.0.0', port=5000)
+
+apt install python3-flask
+flask --app app run
+nano Dockerfile
+	FROM python:3.11
+	WORKDIR /app
+	COPY app.py app.py
+	RUN pip install flask
+	EXPOSE 5000
+	CMD ["python", "app.py"]
+
+docker build -t flask-app .
+docker run -d -p 5000:5000 --name flask-container flask-app
 ```
