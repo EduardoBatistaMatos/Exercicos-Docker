@@ -50,11 +50,13 @@
 ## Resolução Exercício 1️⃣
 ```sh
 docker pull nginx  # Baixa a imagem do Nginx do Docker Hub
-docker run nginx  # Executa um container baseado na imagem do Nginx
-cd /var/www/html  # Acessa o diretório raiz do servidor web
-nano index.nginx-debian.html  # Abre o arquivo HTML para edição e insira o código desejado
+docker run -d -p 8080:80 nginx
+```
+Acesse a pagina padrão do nginx em http://localhost:8080
+```sh
+cd /var/www/html  # Acesse o diretório raiz do servidor web
+nano index.nginx-debian.html  # Abra o arquivo HTML para edição e insira o código desejado no caso o: https://github.com/tailwindtoolbox/Landing-Page/blob/master/index.html
 CTRL + O , CTRL + X.
-No caso utilizei o que foi mencionado no exercício.
 ```
 
 ## Resolução Exercício 2️⃣
