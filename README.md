@@ -132,3 +132,66 @@ nano Dockerfile
 docker build -t flask-app .
 docker run -d -p 5000:5000 --name flask-container flask-app
 ```
+## Resolução Exercício 5️⃣
+```sh
+mkdir exercício
+cd exercicio/
+mkdir mysql-C
+cd ..
+mkdir compose
+cd compose
+mkdir primeiro
+nano docker-compose.yml
+
+version: '3.7'
+
+services:
+  mysqlsrv:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: "Senha123"
+      MYSQL_DATABASE: "testedb"
+    ports:
+      - "3306:3306"
+    volumes:
+      - /exercicio/mysql-C:/var/lib/mysql
+    networks:
+      - minha-rede
+
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+    networks:
+      - minha-rede
+
+networks: 
+  minha-rede:
+    driver: bridge
+
+
+docker-compose up -d
+```
+acesse a pagina com os dados do docker-compose.yml na url http://localhost:8080
+
+crie uma tabela e insira dados nela, após isso pare o container e o apague com o comando ``` sh docker-compose down```
+
+suba a aplicação novamente com o comando ``` sh docker-compose up -d ```
+
+A tabela e os dados inseridos estarão lá pois o volume usado foi o mesmo.
+
+
+
+## Resolução Exercício 6️⃣
+```sh
+
+```
+## Resolução Exercício 7️⃣
+```sh
+```
+## Resolução Exercício 8️⃣
+```sh
+```
+## Resolução Exercício 9️⃣
+```sh
+```
