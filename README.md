@@ -265,7 +265,6 @@ app.get('/todos', async (_, res) => {
 
 app.listen(PORT, () => console.log(`Server rodando na porta ${PORT}`));
 
-
 nano Dockerfile
 
 FROM node:18
@@ -297,6 +296,70 @@ E listar ela:
 
 ## Resolução Exercício 8️⃣
 ```sh
+mkdir django-polls
+cd django-polls
+nano docker-compose.yml
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: meu-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: pollsdb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  web:
+    build: .
+    container_name: django-app
+    restart: always
+    depends_on:
+      - db
+    environment:
+      - DATABASE_NAME=pollsdb
+      - DATABASE_USER=user
+      - DATABASE_PASSWORD=password
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    command: >
+      sh -c "django-admin startproject polls . &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+
+volumes:
+  pgdata:
+
+nano Dockerfile
+
+FROM python:3.11
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+COPY . .
+
+EXPOSE 8000
+
+nano requirements.txt
+
+Django
+psycopg2
+
+docker-compose up --build
+http://localhost:8000/
+
 
 ```
 ## Resolução Exercício 9️⃣
