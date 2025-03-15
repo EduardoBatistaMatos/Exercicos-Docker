@@ -364,4 +364,19 @@ http://localhost:8000/
 ```
 ## Resolução Exercício 9️⃣
 ```sh
+mkdir meu_site
+cd meu_site
+
+nano Dockerfile 
+
+FROM nginx:alpine
+RUN apk update && apk add git
+RUN rm -rf /usr/share/nginx/html/*
+RUN git clone --single-branch --depth 1 https://github.com/creativetimofficial/material-kit.git /usr/share/nginx/html
+EXPOSE 80
+
+docker build -t nginx-material-kit .
+docker run -d -p 8080:80 nginx-material-kit
+
+Podemos acessar a pagina na seguinte URL http://localhost:8080
 ```
